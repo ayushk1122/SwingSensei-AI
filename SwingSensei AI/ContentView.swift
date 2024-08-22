@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  SwingSensei AI
-//
-//  Created by Ayush Krishnappa on 8/21/24.
-//
-
 import SwiftUI
 import CoreData
 import AVFoundation
@@ -181,3 +174,4 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
+

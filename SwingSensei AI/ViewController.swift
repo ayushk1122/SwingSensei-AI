@@ -188,8 +188,10 @@ extension ViewController: AVCaptureFileOutputRecordingDelegate {
 
         do {
             try videoCompositionTrack?.insertTimeRange(timeRange, of: videoTrack, at: .zero)
+
+            // Slow down the video by a factor of 4 (making it slower than the original x2)
             let scaleTimeRange = CMTimeRangeMake(start: .zero, duration: asset.duration)
-            videoCompositionTrack?.scaleTimeRange(scaleTimeRange, toDuration: CMTimeMake(value: asset.duration.value * 2, timescale: asset.duration.timescale))
+            videoCompositionTrack?.scaleTimeRange(scaleTimeRange, toDuration: CMTimeMake(value: asset.duration.value * 4, timescale: asset.duration.timescale))
 
             let exportPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/slowMotionExport_\(Date().timeIntervalSince1970).mov"
             let exportURL = URL(fileURLWithPath: exportPath)
@@ -209,9 +211,7 @@ extension ViewController: AVCaptureFileOutputRecordingDelegate {
                         
                         // Safely access the root view controller once after export
                         if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-                            // Use the rootViewController for further actions
                             print("Root view controller accessed successfully after export.")
-                            // Here you can trigger the display of the playback view or other UI
                         } else {
                             print("Error: Could not access root view controller after export.")
                         }
@@ -238,6 +238,7 @@ extension ViewController: AVCaptureFileOutputRecordingDelegate {
             completion(nil)
         }
     }
+
     
     private func presentVideoPlayer(url: URL) {
         let videoPlayerVC = VideoPlayerViewController()
