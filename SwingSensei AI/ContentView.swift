@@ -7,72 +7,171 @@
 
 import SwiftUI
 import CoreData
+import AVFoundation
+import AVKit
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    var body: some View {
+        TabView {
+            AnalyzeView()
+                .tabItem {
+                    Image(systemName: "camera")
+                    Text("Analyze")
+                }
+            
+            LearnView()
+                .tabItem {
+                    Image(systemName: "book")
+                    Text("Learn")
+                }
+            
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Profile")
+                }
+        }
+    }
+}
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+struct HostedViewController: UIViewControllerRepresentable {
+    @Binding var isRecording: Bool
+    
+    func makeUIViewController(context: Context) -> ViewController {
+        let viewController = ViewController()
+        context.coordinator.viewController = viewController
+        return viewController
+    }
+
+    func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        DispatchQueue.main.async {
+            if isRecording {
+                uiViewController.startRecording()
+            } else {
+                uiViewController.stopRecording()
+            }
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    class Coordinator: NSObject {
+        var viewController: ViewController?
+    }
+}
+
+struct AnalyzeView: View {
+    @State private var isRecording = false
+    @State private var showVideoPlayer = false
+    @State private var recordedVideoURL: URL? = nil
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+        ZStack {
+            HostedViewController(isRecording: $isRecording)
+                .ignoresSafeArea()
+
+            if let url = recordedVideoURL, showVideoPlayer {
+                VStack {
+                    VideoPlayer(player: AVPlayer(url: url))
+                        .frame(height: 300)
+
+                    HStack {
+                        Button(action: {
+                            recordedVideoURL = nil
+                            showVideoPlayer = false
+                            isRecording = false
+                        }) {
+                            Text("Retake")
+                                .font(.title)
+                                .padding()
+                                .background(Color.yellow)
+                                .foregroundColor(.black)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button(action: {
+                            if url != URL(fileURLWithPath: "/dev/null") {
+                                UISaveVideoAtPathToSavedPhotosAlbum(url.path, nil, nil, nil)
+                            }
+                            showVideoPlayer = false
+                        }) {
+                            Text("Confirm")
+                                .font(.title)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
                     }
+                    .padding()
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                .transition(.move(edge: .bottom))
+            } else {
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        isRecording.toggle()
+                    }) {
+                        Circle()
+                            .fill(isRecording ? Color.red : Color.white)
+                            .frame(width: 70, height: 70)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.black, lineWidth: 2)
+                            )
+                            .shadow(radius: 10)
                     }
+                    .padding(.bottom, 50)
                 }
             }
-            Text("Select an item")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("videoRecorded"))) { _ in
+            DispatchQueue.main.async {
+                if let viewController = UIApplication.shared.windows.first?.rootViewController as? ViewController {
+                    if let url = viewController.playbackURL {
+                        recordedVideoURL = url
+                        showVideoPlayer = true
+                        print("Video successfully recorded and saved to URL: \(url)")
+                    } else {
+                        print("Error: No playback URL found.")
+                    }
+                } else {
+                    print("Error: Could not access root view controller.")
+                }
+            }
         }
     }
+}
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+struct LearnView: View {
+    var body: some View {
+        VStack {
+            Text("Learn to Improve")
+                .font(.largeTitle)
+                .padding()
+            Spacer()
         }
+        .navigationTitle("Learn")
     }
+}
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+struct ProfileView: View {
+    var body: some View {
+        VStack {
+            Text("Your Profile")
+                .font(.largeTitle)
+                .padding()
+            Spacer()
         }
+        .navigationTitle("Profile")
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
 
@@ -82,7 +181,3 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
-
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-}

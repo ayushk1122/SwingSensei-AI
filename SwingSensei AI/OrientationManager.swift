@@ -1,8 +1,20 @@
-//
-//  OrientationManager.swift
-//  SwingSensei AI
-//
-//  Created by Ayush Krishnappa on 8/22/24.
-//
+import SwiftUI
+import Combine
 
-import Foundation
+class OrientationManager: ObservableObject {
+    @Published var orientation: UIDeviceOrientation = UIDevice.current.orientation
+    
+    private var cancellable: AnyCancellable?
+    
+    init() {
+        cancellable = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+            .compactMap { notification in
+                return UIDevice.current.orientation
+            }
+            .assign(to: \.orientation, on: self)
+    }
+    
+    deinit {
+        cancellable?.cancel()
+    }
+}

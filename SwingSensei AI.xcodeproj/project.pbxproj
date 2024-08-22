@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830027612C77E2FA002348A0 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830027602C77E2FA002348A0 /* VideoPlayerViewController.swift */; };
+		831210672C77B55300D9BB85 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831210662C77B55300D9BB85 /* ViewController.swift */; };
+		836CE4652C76C45B005EB274 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836CE4642C76C45B005EB274 /* CameraManager.swift */; };
+		83A2A05E2C77AD3D002385A5 /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2A05D2C77AD3D002385A5 /* OrientationManager.swift */; };
 		83DDA7252C769E8D00C66EB7 /* SwingSensei_AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDA7242C769E8D00C66EB7 /* SwingSensei_AIApp.swift */; };
 		83DDA7272C769E8D00C66EB7 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDA7262C769E8D00C66EB7 /* Persistence.swift */; };
 		83DDA72A2C769E8D00C66EB7 /* SwingSensei_AI.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 83DDA7282C769E8D00C66EB7 /* SwingSensei_AI.xcdatamodeld */; };
@@ -36,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		830027602C77E2FA002348A0 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
+		831210662C77B55300D9BB85 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		836CE4642C76C45B005EB274 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		83A2A05D2C77AD3D002385A5 /* OrientationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
 		83DDA7212C769E8D00C66EB7 /* SwingSensei AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwingSensei AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DDA7242C769E8D00C66EB7 /* SwingSensei_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwingSensei_AIApp.swift; sourceTree = "<group>"; };
 		83DDA7262C769E8D00C66EB7 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -79,6 +87,7 @@
 		83DDA7182C769E8D00C66EB7 = {
 			isa = PBXGroup;
 			children = (
+				836CE4642C76C45B005EB274 /* CameraManager.swift */,
 				83DDA7232C769E8D00C66EB7 /* SwingSensei AI */,
 				83DDA73A2C769E8F00C66EB7 /* SwingSensei AITests */,
 				83DDA7442C769E8F00C66EB7 /* SwingSensei AIUITests */,
@@ -102,6 +111,9 @@
 				83DDA7242C769E8D00C66EB7 /* SwingSensei_AIApp.swift */,
 				83DDA7262C769E8D00C66EB7 /* Persistence.swift */,
 				83DDA72B2C769E8D00C66EB7 /* ContentView.swift */,
+				831210662C77B55300D9BB85 /* ViewController.swift */,
+				830027602C77E2FA002348A0 /* VideoPlayerViewController.swift */,
+				83A2A05D2C77AD3D002385A5 /* OrientationManager.swift */,
 				83DDA72D2C769E8E00C66EB7 /* Assets.xcassets */,
 				83DDA72F2C769E8E00C66EB7 /* SwingSensei_AI.entitlements */,
 				83DDA7282C769E8D00C66EB7 /* SwingSensei_AI.xcdatamodeld */,
@@ -267,8 +279,12 @@
 			files = (
 				83DDA7252C769E8D00C66EB7 /* SwingSensei_AIApp.swift in Sources */,
 				83DDA72A2C769E8D00C66EB7 /* SwingSensei_AI.xcdatamodeld in Sources */,
+				83A2A05E2C77AD3D002385A5 /* OrientationManager.swift in Sources */,
 				83DDA72C2C769E8D00C66EB7 /* ContentView.swift in Sources */,
+				831210672C77B55300D9BB85 /* ViewController.swift in Sources */,
+				830027612C77E2FA002348A0 /* VideoPlayerViewController.swift in Sources */,
 				83DDA7272C769E8D00C66EB7 /* Persistence.swift in Sources */,
+				836CE4652C76C45B005EB274 /* CameraManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,8 +444,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwingSensei AI/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3A658XNY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SwingSensei AI needs access to your camera to record your swing.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SwingSensei AI requires access to your microphone to record your swing video with audio.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "SwingSensei AI needs access to your photo library to save your swing videos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -439,7 +459,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -464,8 +484,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwingSensei AI/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3A658XNY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SwingSensei AI needs access to your camera to record your swing.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SwingSensei AI requires access to your microphone to record your swing video with audio.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "SwingSensei AI needs access to your photo library to save your swing videos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -475,7 +499,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
