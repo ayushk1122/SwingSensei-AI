@@ -281,51 +281,16 @@ struct HostedViewController: UIViewControllerRepresentable {
 
 struct AnalyzeView: View {
     @State private var isRecording = false
-    @State private var showVideoPlayer = false
+    @State private var showCameraPreview = false
     @State private var recordedVideoURL: URL? = nil
 
     var body: some View {
         ZStack {
-            HostedViewController(isRecording: $isRecording)
-                .ignoresSafeArea()
-
-            if let url = recordedVideoURL, showVideoPlayer {
-                VStack {
-                    VideoPlayer(player: AVPlayer(url: url))
-                        .frame(height: 300)
-
-                    HStack {
-                        Button(action: {
-                            recordedVideoURL = nil
-                            showVideoPlayer = false
-                            isRecording = false
-                        }) {
-                            Text("Retake")
-                                .font(.title)
-                                .padding()
-                                .background(Color.yellow)
-                                .foregroundColor(.black)
-                                .cornerRadius(10)
-                        }
-                        
-                        Button(action: {
-                            if url != URL(fileURLWithPath: "/dev/null") {
-                                UISaveVideoAtPathToSavedPhotosAlbum(url.path, nil, nil, nil)
-                            }
-                            showVideoPlayer = false
-                        }) {
-                            Text("Confirm")
-                                .font(.title)
-                                .padding()
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                    }
-                    .padding()
-                }
-                .transition(.move(edge: .bottom))
-            } else {
+            if showCameraPreview {
+                HostedViewController(isRecording: $isRecording)
+                    .ignoresSafeArea()
+                    .transition(.move(edge: .bottom))
+                
                 VStack {
                     Spacer()
                     Button(action: {
@@ -342,6 +307,66 @@ struct AnalyzeView: View {
                     }
                     .padding(.bottom, 50)
                 }
+            } else {
+                VStack {
+                    Text("Analyze Your Swing")
+                        .font(.largeTitle)
+                        .padding()
+
+                    Button(action: {
+                        withAnimation {
+                            showCameraPreview = true
+                        }
+                    }) {
+                        Text("Record Swing")
+                            .font(.title)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                }
+            }
+
+            if let url = recordedVideoURL, !isRecording {
+                VStack {
+                    VideoPlayer(player: AVPlayer(url: url))
+                        .frame(height: 300)
+
+                    HStack {
+                        Button(action: {
+                            // Clear the recorded video URL so it doesn't get saved to the library
+                            recordedVideoURL = nil
+                            showCameraPreview = false
+                        }) {
+                            Text("Retake")
+                                .font(.title)
+                                .padding()
+                                .background(Color.yellow)
+                                .foregroundColor(.black)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button(action: {
+                            // Only save to the library when the Save button is pressed
+                            if let saveURL = recordedVideoURL, saveURL != URL(fileURLWithPath: "/dev/null") {
+                                UISaveVideoAtPathToSavedPhotosAlbum(saveURL.path, nil, nil, nil)
+                            }
+                            // Clear the video URL after saving
+                            recordedVideoURL = nil
+                            showCameraPreview = false
+                        }) {
+                            Text("Save")
+                                .font(.title)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .padding()
+                }
+                .transition(.move(edge: .bottom))
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("videoRecorded"))) { _ in
@@ -349,7 +374,8 @@ struct AnalyzeView: View {
                 if let viewController = UIApplication.shared.windows.first?.rootViewController as? ViewController {
                     if let url = viewController.playbackURL {
                         recordedVideoURL = url
-                        showVideoPlayer = true
+                        showCameraPreview = false
+                        isRecording = false
                         print("Video successfully recorded and saved to URL: \(url)")
                     } else {
                         print("Error: No playback URL found.")
@@ -359,8 +385,19 @@ struct AnalyzeView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("retakeVideo"))) { _ in
+            showCameraPreview = false
+            recordedVideoURL = nil
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("videoSaved"))) { _ in
+            showCameraPreview = false
+            recordedVideoURL = nil
+        }
     }
 }
+
+
+
 
 struct LearnView: View {
     var body: some View {

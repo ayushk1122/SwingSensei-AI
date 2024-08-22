@@ -49,12 +49,14 @@ class VideoPlayerViewController: UIViewController {
     }
 
     @objc private func retakeTapped() {
+        NotificationCenter.default.post(name: NSNotification.Name("retakeVideo"), object: nil)
         dismiss(animated: true, completion: nil)
     }
 
     @objc private func saveTapped() {
         guard let url = videoURL else { return }
         UISaveVideoAtPathToSavedPhotosAlbum(url.path, nil, nil, nil)
+        NotificationCenter.default.post(name: NSNotification.Name("videoSaved"), object: nil)
         dismiss(animated: true, completion: nil)
     }
 }
